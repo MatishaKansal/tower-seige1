@@ -2,84 +2,83 @@ const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
-const Render = Matter.Render;
-var lastMouseX = null;
-var lastMouseY = null;
 
 var engine, world;
-var ground, box1;
-
+var holder, ball, ground;
+var stand1, stand2;
+var ball;
+var slingShot;
+var polygon_img;
 function preload() {
-  polyimg = loadImage("polygon.png");
+  polygon_img = loadImage("polygon.png");
 }
-
 function setup() {
-  var canvas = createCanvas(1200, 400);
+  createCanvas(900, 400);
   engine = Engine.create();
   world = engine.world;
-  ground1 = new Ground(600, height, 1200, 20);
-  ground2 = new Ground(550, 302, 200, 10);
-  ground3 = new Ground(950, 202, 200, 10);
+  Engine.run(engine);
+  ground = new Base();
+  stand1 = new Ground(390, 300, 250, 10);
+  stand2 = new Ground(700, 200, 200, 10);
 
-  box1 = new Box(530, 235, 40, 40);
-  box2 = new Box(570, 235, 40, 40);
-  box3 = new Box(550, 195, 40, 40);
-  box4 = new Box(510, 275, 40, 40);
-  box5 = new Box(550, 275, 40, 40);
-  box6 = new Box(590, 275, 40, 40);
-  box7 = new Box(930, 135, 40, 40);
-  box8 = new Box(970, 135, 40, 40);
-  box9 = new Box(950, 95, 40, 40);
-  box10 = new Box(910, 175, 40, 40);
-  box11 = new Box(950, 175, 40, 40);
-  box12 = new Box(990, 175, 40, 40);
-  polygon = Bodies.circle(50, 200, 20);
-  World.add(world, polygon);
+  //level one
+  block1 = new Block(340, 275, 40, 40);
+  block2 = new Block(360, 235, 40, 40);
+  block3 = new Block(380, 275, 40, 40);
+  block4 = new Block(400, 235, 40, 40);
+  block5 = new Block(420, 275, 40, 40);
+  block6 = new Block(380, 195, 40, 40);
+  blocks1 = new Block(650, 175, 40, 40);
+  blocks2 = new Block(690, 175, 40, 40);
+  blocks3 = new Block(670, 135, 40, 40);
+  blocks4 = new Block(730, 175, 40, 40);
+  blocks5 = new Block(710, 135, 40, 40);
+  blocks6 = new Block(690, 95, 40, 40);
 
-  sling = new Slingshot(this.polygon, { x: 200, y: 200 });
+  //ball holder with slings
+  ball = Bodies.circle(50, 200, 20);
+  World.add(world, ball);
 
-  var render = Render.create({
-    element: document.body,
-    engine: engine,
-    options: {
-      width: 1600,
-      height: 700,
-      wireframes: false,
-    },
-  });
+  slingShot = new Slingshot(this.ball, { x: 100, y: 200 });
 }
-
 function draw() {
-  background(153, 217, 234);
-  // background(225);
-  Engine.update(engine);
-  strokeWeight(4);
-  box1.display();
-  box2.display();
-  box3.display();
-  box4.display();
-  box5.display();
-  box6.display();
-  box7.display();
-  box8.display();
-  box9.display();
-  box10.display();
-  box11.display();
-  box12.display();
-  ground1.display();
-  ground2.display();
-  ground3.display();
+  background(107, 206, 237);
 
-  sling.display();
+  //Engine.update(engine);
+  //text(mouseX + ',' + mouseY, 10, 15);
+  textSize(20);
+  fill("lightyellow");
+  text(
+    "Drag the Hexagonal Stone and Release it, to launch it towards the blocks",
+    100,
+    30
+  );
+
+  ground.display();
+  stand1.display();
+  stand2.display();
+  strokeWeight(2);
+  stroke(15);
+  block1.display();
+  block2.display();
+  block3.display();
+  block4.display();
+  block5.display();
+  block6.display();
+  blocks1.display();
+  blocks2.display();
+  blocks3.display();
+  blocks4.display();
+  blocks5.display();
+  blocks6.display();
   imageMode(CENTER);
-  image(polyimg, polygon.position.x, polygon.position.y, 40, 40);
-  // drawSprites();
-}
+  image(polygon_img, ball.position.x, ball.position.y, 40, 40);
 
+  slingShot.display();
+}
 function mouseDragged() {
-  Matter.Body.setPosition(polygon.body, { x: mouseX, y: mouseY });
+  Matter.Body.setPosition(this.ball, { x: mouseX, y: mouseY });
 }
-
 function mouseReleased() {
-  sling.fly();
+  slingShot.fly();
 }
